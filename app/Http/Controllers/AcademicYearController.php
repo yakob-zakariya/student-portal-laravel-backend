@@ -11,7 +11,7 @@ class AcademicYearController extends Controller
     public function index()
     {
 
-        $academicYears = AcademicYear::with('semesters')->get();
+        $academicYears = AcademicYear::all();
 
         return AcademicYearResource::collection($academicYears);
     }

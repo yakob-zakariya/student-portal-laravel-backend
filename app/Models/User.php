@@ -50,4 +50,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function coordinator()
+    {
+        return $this->hasOne(Coordinator::class);
+    }
 }

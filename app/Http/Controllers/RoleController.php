@@ -11,7 +11,8 @@ class RoleController extends Controller
 {
     public function index()
     {
-        $roles = Role::with('permissions')->get();
+        // $roles = Role::with('permissions')->get();
+        $roles = Role::all();
         return RoleResource::collection($roles);
     }
 
@@ -40,5 +41,11 @@ class RoleController extends Controller
         $role->update($validated);
 
         return new RoleResource($role);
+    }
+
+    public function destroy(Role $role)
+    {
+        $role->delete();
+        return response()->json(['message' => 'Role deleted successfully']);
     }
 }

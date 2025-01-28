@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\UserResource;
+use App\Models\User;
 
 class AuthController extends Controller
 {
@@ -23,10 +24,14 @@ class AuthController extends Controller
                 ['email' => [
                     'The provided credentials are incorrect.'
                 ]]
-            ]);
+            ], 401);
         }
 
-        $user = Auth::user();
+
+
+
+        $user = User::where('email', $request->email)->first();
+
         $token = $user->createToken('auth_token')->plainTextToken;
         return response([
             'token' => $token,
@@ -39,9 +44,10 @@ class AuthController extends Controller
         return new UserResource(Auth::user());
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
-        Auth::user()->currentAccessToken()->delete();
+        $user = $request->user();
+        $user->currentAccessToken()->delete();
         return response([
             'message' => 'Logged out'
         ]);

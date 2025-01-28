@@ -4,7 +4,8 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Role as RoleModel;
+use App\Enums\Role;
 
 class RoleSeeder extends Seeder
 {
@@ -13,16 +14,8 @@ class RoleSeeder extends Seeder
      */
     public function run(): void
     {
-        $roles = [
-            "ADMIN",
-            "REGISTRAR",
-            "STUDENT",
-            "TEACHER",
-            "COORDINATOR",
-        ];
-
-        foreach ($roles as $role) {
-            Role::firstOrCreate(['name' => $role]);
+        foreach (Role::cases() as $role) {
+            RoleModel::firstOrCreate(['name' => $role]);
         }
     }
 }

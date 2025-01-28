@@ -21,6 +21,7 @@ class RolePermissionController extends Controller
 
     public function assignPermissionsToRole(Request $request, Role $role)
     {
+
         $validated = $request->validate([
             'permissions' => ['required', 'array'],
             'permissions.*' => ['integer', 'exists:permissions,id'],
@@ -28,7 +29,9 @@ class RolePermissionController extends Controller
 
 
 
+
         $permissions = Permission::whereIn('id', $validated['permissions'])->get();
+
 
         $role->syncPermissions($permissions);
 
