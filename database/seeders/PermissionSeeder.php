@@ -5,6 +5,9 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
+use App\Enums\Role as RoleEnum;
+use App\Enums\Permission as PermissionEnum;
 
 class PermissionSeeder extends Seeder
 {
@@ -13,28 +16,11 @@ class PermissionSeeder extends Seeder
      */
     public function run(): void
     {
-        $permissions = [
-            'academicYear-list',
-            'academicYear-show',
 
-            'academicYear-create',
-            'academicYear-edit',
-            'academicYear-delete',
-
-
-            'course-list',
-            'course-show',
-
-            'course-create',
-            'course-edit',
-            'course-delete',
-
-        ];
-
-
-
-        foreach ($permissions as $permission) {
-            Permission::createOrFirst(['name' => $permission]);
+        $superAdminRole  =  Role::where('name', RoleEnum::SUPER_ADMIN)->first();
+        foreach (PermissionEnum::cases() as $permission) {
+            $perm = Permission::firstOrCreate(['name' => $permission]);
+            $superAdminRole->givePermissionTo($perm);
         }
     }
 }
