@@ -10,6 +10,7 @@ use App\Services\UsernameGenerator;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\Coordinator;
+use Illuminate\Support\Facades\DB;
 
 class CoordinatorUserController extends Controller
 {
@@ -21,26 +22,25 @@ class CoordinatorUserController extends Controller
 
     public function store(StoreUserRequest $request)
     {
-        $validated = $request->validated();
-        $request->validate([
-            'department_id' => ['required', 'integer', 'exists:departments,id'],
-        ]);
 
-        $validated['department_id'] = $request->department_id;
-        $validated['username'] = UsernameGenerator::generate('coordinator');
-        $validated['password'] = bcrypt("password");
+        $userResource = DB::transaction(function () use ($request) {
+            $userController = new UserController();
+            $userResource = $userController->store($request);
+            $user = $userResource->resource;
 
 
-        $user = User::create($validated);
-        $user->assignRole('coordinator');
-        Coordinator::create([
-            'user_id' => $user->id,
-            'department_id' => $validated['department_id']
-        ]);
+            $validated = $request->validate([
+                'department_id' => ['required', 'integer', 'exists:departments,id'],
+            ]);
+
+            $user->coordinator()->create($validated);
+            $user->load('coordinator.department');
+
+            return new UserResource($user);
+        });
 
 
-        $user->load('coordinator.department');
-        return new UserResource($user);
+        return $userResource;
     }
 
     public function show(User $user)
@@ -65,6 +65,6 @@ class CoordinatorUserController extends Controller
 
         return response()->json([
             'message' => "user deleted Successfully"
-        ]);
+        ], 204);
     }
 }

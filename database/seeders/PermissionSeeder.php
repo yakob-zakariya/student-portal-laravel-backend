@@ -19,7 +19,7 @@ class PermissionSeeder extends Seeder
 
         $superAdminRole  =  Role::where('name', RoleEnum::SUPER_ADMIN)->first();
         foreach (PermissionEnum::cases() as $permission) {
-            $perm = Permission::firstOrCreate(['name' => $permission]);
+            $perm = Permission::firstOrCreate(['name' => $permission, 'guard_name' => 'sanctum']);
             $superAdminRole->givePermissionTo($perm);
         }
     }

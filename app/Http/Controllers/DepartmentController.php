@@ -10,7 +10,7 @@ class DepartmentController extends Controller
 {
     public function index()
     {
-        $departments = Department::all();
+        $departments = Department::with('batches')->get();
         // dd($departments);
         return DepartmentResource::collection($departments);
     }
@@ -29,6 +29,8 @@ class DepartmentController extends Controller
 
     public function show(Department $department)
     {
+
+        $department->load('batches');
         return new DepartmentResource($department);
     }
 
@@ -46,6 +48,6 @@ class DepartmentController extends Controller
     public function destroy(Department $department)
     {
         $department->delete();
-        return response()->json(['message' => 'Department deleted successfully']);
+        return response()->json(['message' => 'Department deleted successfully'], 204);
     }
 }

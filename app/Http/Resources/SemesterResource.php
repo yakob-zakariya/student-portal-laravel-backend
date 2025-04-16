@@ -17,6 +17,7 @@ class SemesterResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'registration_open' => $this->registration_open,
         ];
     }
 }

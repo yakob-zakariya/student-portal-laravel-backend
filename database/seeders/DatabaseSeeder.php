@@ -15,15 +15,22 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        // User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        $user = User::factory()->create([
+            'first_name' => 'Yakob',
+            "middle_name" => "Zakariya",
+            "last_name" => "Aman",
+            'email' => 'yysiyzx07@gmail.com',
+            'password' => bcrypt('password'),
+            'username' => 'ADM/1000/12'
+        ]);
 
         $this->call([
             RoleSeeder::class,
             // CourseSeeder::class,
             PermissionSeeder::class,
         ]);
+
+        $super_admin_role = \Spatie\Permission\Models\Role::where('name', 'super-admin')->first();
+        $user->assignRole($super_admin_role);
     }
 }
