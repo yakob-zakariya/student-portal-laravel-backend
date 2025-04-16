@@ -18,6 +18,8 @@ class DepartmentResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'code' => $this->code,
+            'batches' =>
+            BatchResource::collection($this->whenLoaded('batches'))
 
         ];
     }

@@ -33,13 +33,17 @@ class RolePermissionController extends Controller
         $permissions = Permission::whereIn('id', $validated['permissions'])->get();
 
 
-        $role->syncPermissions($permissions);
+
+
+        foreach ($permissions as $permission) {
+            $role->givePermissionTo($permission);
+        }
 
         return response()->json([
             'message' => 'Permissions assigned to role successfully',
             'role' => $role,
             'permissions' => $permissions
-        ]);
+        ], 201);
     }
 
     public function revokePermissionFromRole(Request $request, Role $role)
@@ -60,6 +64,6 @@ class RolePermissionController extends Controller
             'message' => 'Permissions revoked from role successfully',
             'role' => $role,
             'permissions' => $permissions
-        ]);
+        ], 204);
     }
 }
