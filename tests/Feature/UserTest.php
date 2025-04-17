@@ -66,7 +66,7 @@ class UserTest extends TestCase
             'username' => 'UGR/0000/12'
         ]);
 
-        $role  = Role::create(['name' => 'coordinator']);
+        $role  = Role::create(['name' => 'coordinator', 'guard_name' => 'sanctum']);
 
         $user->assignRole($role);
         $department = Department::create([

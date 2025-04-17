@@ -34,7 +34,7 @@ class CoordinatorUserTest extends TestCase
         ]);
     }
 
-    public function test_authorize_user_can_create_coordinator_user()
+    public function test_authorized_user_can_create_coordinator_user()
     {
 
 
@@ -49,10 +49,14 @@ class CoordinatorUserTest extends TestCase
 
         ]);
 
+
+        // dd($response->json()['id']);
+
+
         $response->assertStatus(201);
 
         $this->assertDatabaseHas('users', ['email' => 'yakobmengesha@gmail.com']);
 
-        $this->assertDatabaseHas('coordinators', ['user_id' => $response->json('data.id'), 'department_id' => $this->department->id]);
+        $this->assertDatabaseHas('coordinators', ['user_id' => $response->json()['id'], 'department_id' => $this->department->id]);
     }
 }
