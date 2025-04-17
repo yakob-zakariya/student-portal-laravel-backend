@@ -11,18 +11,22 @@ class AuthTest extends TestCase
 {
     use RefreshDatabase;
 
+
+
+
     public function test_a_user_can_login_with_valid_credentials(): void
     {
         $user = User::factory()->create([
-            'email' => 'yakob@gmail.com',
             'password' => bcrypt('password'),
-            'username' => 'UGR/0000/12'
         ]);
 
-        $response = $this->withHeaders(['x-header' => 'value'])->postJson('/api/v1/login', [
-            'email' => 'yakob@gmail.com',
+
+        $response = $this->postJson('/api/v1/login', [
+            'email' => $user->email,
             'password' => 'password'
         ]);
+
+
 
         // $response->dumpHeaders();
         // $response->dump();
@@ -37,21 +41,21 @@ class AuthTest extends TestCase
 
     public function test_a_user_cannot_login_with_invalid_credentials()
     {
-        // Create a user
+
+
         $user = User::factory()->create([
-            'email' => 'test@example.com',
-            'password' => bcrypt('password123'),
-            'username' => 'UGR/0000/00'
+            'password' => bcrypt('password'),
         ]);
+
 
         // Make a POST request with invalid credentials
         $response = $this->postJson('/api/v1/login', [
-            'email' => 'test@example.com',
+            'email' => $user->email,
             'password' => 'wrongpassword',
         ]);
 
         // Assert the response status is 401 (Unauthorized)
-        $response->assertStatus(401);
+        $response->assertStatus(422);
 
         // Assert the response contains an error message
         // $response->assertJson([

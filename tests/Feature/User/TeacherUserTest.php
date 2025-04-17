@@ -89,6 +89,6 @@ class TeacherUserTest extends TestCase
 
         $this->assertDatabaseHas('users', ['email' => 'yakobmangesh@gmail.com']);
 
-        $this->assertDatabaseHas('teachers', ['user_id' => $response->json('data.id')]);
+        $this->assertDatabaseHas('teachers', ['user_id' => $response->json()['id']]);
     }
 }
