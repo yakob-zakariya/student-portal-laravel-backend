@@ -29,6 +29,10 @@ class SemesterController extends Controller
                 'required',
                 'string',
                 new CompositeUnique('semesters', ['name' => $request->name, 'academic_year_id' => $academicYear->id])
+            ],
+            'registration_open' => [
+                'sometimes',
+                'boolean'
             ]
         ]);
 
