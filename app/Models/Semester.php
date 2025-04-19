@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Semester extends Model
 {
-    protected $fillable = ['name', 'academic_year',];
+    protected $fillable = ['name', 'academic_year', 'registration_open'];
 
     public function academicYear()
     {
